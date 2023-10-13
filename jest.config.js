@@ -2,7 +2,7 @@
  * For a detailed explanation regarding each configuration property, visit:
  * https://jestjs.io/docs/configuration
  */
- const { defaults: tsjPreset } = require('ts-jest/presets');
+const { defaults: tsjPreset } = require('ts-jest/presets');
 
 /** @type {import('jest').Config} */
 const config = {
@@ -109,17 +109,17 @@ const config = {
 
   // Use this configuration option to add custom reporters to Jest
   reporters: [
-		'default',
-		[
-			'./node_modules/jest-html-reporters',
-			{
-				pageTitle: 'Test report',
-				publicPath: './test-result/report',
-				filename: 'index.html',
-				expand: false,
-			}
-		]
-	],
+    'default',
+    [
+      './node_modules/jest-html-reporters',
+      {
+        pageTitle: 'Test report',
+        publicPath: './test-result/report',
+        filename: 'index.html',
+        expand: false,
+      }
+    ]
+  ],
 
   // Automatically reset mock state before every test
   // resetMocks: false,
