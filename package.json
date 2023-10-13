@@ -4,8 +4,10 @@
   "description": "Some custom tools for working",
   "main": "index.js",
   "scripts": {
+    "prebuild": "npm run clean",
     "build": "npx tsc",
     "test": "jest",
+    "clean": "npx rimraf ./dist tsconfig.tsbuildinfo",
     "lint": "node ./node_modules/eslint/bin/eslint.js src --ext=.ts,.js,.jsx",
     "lint:fix": "eslint --fix . --ext .ts"
   },
