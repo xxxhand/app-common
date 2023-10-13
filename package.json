@@ -1,8 +1,19 @@
 {
-  "name": "app-common",
+  "name": "@xxxhand/app-common",
   "version": "0.0.1",
   "description": "Some custom tools for working",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "package.json"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
   "scripts": {
     "prebuild": "npm run clean",
     "build": "npx tsc",
