@@ -1,6 +1,6 @@
 import { CustomResult } from '../custom-result';
 
-describe('Custom result model test', () => {
+describe('Custom result test', () => {
   it('Call isOk method should return true', () => {
     const res = new CustomResult<string>();
     expect(res.isOK()).toBe(true);

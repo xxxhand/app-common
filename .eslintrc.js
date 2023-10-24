@@ -24,7 +24,15 @@ module.exports = {
     ],
     "parserOptions": {
         "ecmaVersion": "latest",
-        "sourceType": "module"
+        "sourceType": "module",
+        "project": "./tsconfig.json"
+    },
+    "settings": {
+        "import/resolver": {
+            "node": {
+                "extensions": [".js", ".jsx", ".ts", ".tsx"]
+            }
+        }
     },
     "rules": {
         "no-var": "error",
@@ -47,6 +55,7 @@ module.exports = {
         "no-eval": "error",
         "no-inline-comments": "error",
         "no-const-assign": "error",
+        "no-underscore-dangle": "off",
         "semi": [
             "error",
             "always"
@@ -55,6 +64,16 @@ module.exports = {
             "error",
             "interface"
         ],
+        "import/extensions": [
+            "error",
+            "ignorePackages",
+            {
+                "js": "never",
+                "jsx": "never",
+                "ts": "never",
+                "tsx": "never"
+            }
+        ]
     },
     "globals": {
         "document": false,

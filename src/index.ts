@@ -1,3 +1,3 @@
-export function mySum(a: number, b: number): number {
-  return a + b;
-}
+export * as CustomError from './custom-error';
+export * as CustomResult from './custom-result';
+export * as CustomTypes from './custom-types';
