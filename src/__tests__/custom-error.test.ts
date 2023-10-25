@@ -123,4 +123,14 @@ describe('Custom error test', () => {
     expect(() => CustomError.addCodes(newCodes)).toThrowError('Duplicate code name SUCCESS was founded')
     expect(CustomError.getCodes()).toHaveLength(2);
   });
+  it('Function format should place variables into string', () => {
+    const rawMessage = 'This is %s test for formating %i';
+    const msgArgs: Array<string | number> = ['xxxhand', 100];
+    const err = new CustomError(rawMessage, msgArgs);
+    err.format();
+    expect(err.code).toBe(99999);
+    expect(err.codeName).toBe('ERR_OTHERS');
+    expect(err.httpStatus).toBe(500);
+    expect(err.message).toBe('This is xxxhand test for formating 100');
+  });
 })

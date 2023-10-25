@@ -1,3 +1,4 @@
+import * as util from 'util';
 import { StatusCodes } from 'http-status-codes';
 import {
   ICodeStruct,
@@ -15,15 +16,18 @@ export class CustomError extends Error {
 
   private _httpStatus: number = StatusCodes.INTERNAL_SERVER_ERROR;
 
+  private _msgArgs: Array<string | number> = [];
+
   private static readonly _errorCodes: Map<string, ICodeStruct> = new Map();
 
-  constructor(codeName: string) {
+  constructor(codeName: string, msgArgs?: Array<string | number>) {
     super();
     const e = CustomError.getCode(codeName);
     this._code = e.code;
     this._message = e.message;
     this._httpStatus = e.httpStatus;
     this._codeName = e.codeName;
+    this._msgArgs = msgArgs || [];
   }
 
   /**
@@ -35,7 +39,6 @@ export class CustomError extends Error {
 
   /**
    * Setter message
-   * @param {string } value
    */
   public set message(value: string) {
     this._message = value;
@@ -63,14 +66,36 @@ export class CustomError extends Error {
   }
 
   /**
+   * Getter msgArgs
+   */
+  public get msgArgs(): Array<string | number> {
+    return this._msgArgs;
+  }
+
+  /**
+   * Setter msgArgs
+   */
+  public set msgArgs(value: Array<string | number>) {
+    this._msgArgs = value;
+  }
+
+  /**
    * To check current instance is success or not
    */
   public isSuccess(): boolean {
     return this._code === 0;
   }
 
+  /** To check current instance is exception or not */
   public isException(): boolean {
     return this._code === OTHER_ERROR_CODE;
+  }
+
+  /** To place msg args to message */
+  public format(): void {
+    if (this._msgArgs.length > 0) {
+      this._message = util.format(this.message, ...this.msgArgs);
+    }
   }
 
   /**
