@@ -5,7 +5,7 @@ import {
   OTHER_ERROR_CODE,
   OTHER_ERROR_CODE_NAME,
   OTHER_ERROR_MSG,
-} from './custom-types';
+} from './custom-definition';
 
 export class CustomError extends Error {
   private _code: number = OTHER_ERROR_CODE;

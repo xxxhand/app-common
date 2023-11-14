@@ -1,5 +1,5 @@
 import { StatusCodes } from 'http-status-codes';
-import { ICodeStruct } from '../custom-types';
+import { ICodeStruct } from '../custom-definition';
 import { CustomError } from '../custom-error';
 
 describe('Custom error test', () => {
