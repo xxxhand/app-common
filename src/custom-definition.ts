@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars, no-shadow */
+/** For custom error usage */
 export interface ICodeStruct {
 	/** Code name */
   codeName: string;
@@ -8,6 +10,22 @@ export interface ICodeStruct {
 	/** Message */
 	message: string;
 }
+/** For custom error usage */
+
+/** For custom validator usage */
+export enum validateStrategy {
+	NON_EMPTY_STRING = 'isNonEmptyString',
+	NON_EMPTY_ARRAY = 'isNonEmptyArray',
+	IS_EMAIL = 'isEmail',
+	IS_NUMBER = 'isNumber',
+}
+export type validateFunc = (val: any) => boolean;
+export interface IValidateRule {
+	s?: validateStrategy;
+	m: string;
+	fn?: validateFunc;
+}
+/** For custom validator usage */
 
 export type TNullable<T> = T | undefined | null;
 
