@@ -19,4 +19,3 @@ export const BASIC_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz
 export const COMPLEX_CHARS = `${BASIC_CHARS}!@#$%&*.+-;`;
 export const NUMS = '0123456789';
 export const SALT_ROUNDS = 9;
-
