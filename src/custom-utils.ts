@@ -1,3 +1,4 @@
+import * as uuid from 'uuid';
 import * as _ from 'lodash';
 import {
   BASIC_CHARS, COMPLEX_CHARS, SALT_ROUNDS, NUMS,
@@ -45,6 +46,11 @@ export class CustomUtils {
   /** Make random string w/ symbols */
   public static makeComplexRandomString(len = SALT_ROUNDS): string {
     return this._generateRandomValues(len, COMPLEX_CHARS);
+  }
+
+  /** Make UUID */
+  public static makeUUID(): string {
+    return uuid.v4();
   }
 
   private static _generateRandomValues(len: number, chars: string): string {
