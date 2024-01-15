@@ -37,3 +37,14 @@ export const BASIC_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz
 export const COMPLEX_CHARS = `${BASIC_CHARS}!@#$%&*.+-;`;
 export const NUMS = '0123456789';
 export const SALT_ROUNDS = 9;
+
+/** For generate json web token */
+export interface IPrivateKeyStruct {
+	key: string,
+	passphrase: string,
+}
+
+export const DEFAULT_ENCODING = 'utf-8';
+export const DEFAULT_CRYPTO_ALG = 'RS256';
+// Default expires in one hour
+export const DEFAULT_EXPIRES_IN_SECONDS = 60 * 60 * 1;

@@ -1,13 +1,13 @@
 import * as uuid from 'uuid';
 import * as _ from 'lodash';
+import * as jwt from 'jsonwebtoken';
 import {
-  BASIC_CHARS, COMPLEX_CHARS, SALT_ROUNDS, NUMS,
+  BASIC_CHARS, COMPLEX_CHARS, SALT_ROUNDS, NUMS, IPrivateKeyStruct,
+  DEFAULT_CRYPTO_ALG, DEFAULT_ENCODING, DEFAULT_EXPIRES_IN_SECONDS,
 } from './custom-definition';
 
 export class CustomUtils {
   private static readonly _BASE64 = 'base64';
-
-  private static readonly _UTF8 = 'utf-8';
 
   /** Pause process in seconds */
   public static async sleep(inSeconds: number): Promise<void> {
@@ -25,7 +25,7 @@ export class CustomUtils {
 
   /** Convert base64 string to string */
   public static fromBase64ToString(base64Str = ''): string {
-    return Buffer.from(base64Str, this._BASE64).toString(this._UTF8);
+    return Buffer.from(base64Str, this._BASE64).toString(DEFAULT_ENCODING);
   }
 
   /** Clone object */
@@ -46,6 +46,38 @@ export class CustomUtils {
   /** Make random string w/ symbols */
   public static makeComplexRandomString(len = SALT_ROUNDS): string {
     return this._generateRandomValues(len, COMPLEX_CHARS);
+  }
+
+  /**
+   * Make one json web token with private key and passphase
+   * @param payload
+   * @param key
+   * @param expiresInSeconds default value is one hour
+   * @returns {Promise<string>}
+   */
+  // eslint-disable-next-line max-len
+  public static async makeJsonWebToken(payload: string | object, key: IPrivateKeyStruct, expiresInSeconds: number = DEFAULT_EXPIRES_IN_SECONDS): Promise<string> {
+    return new Promise((res, rej) => {
+      // eslint-disable-next-line max-len
+      jwt.sign(payload, key, { algorithm: DEFAULT_CRYPTO_ALG, expiresIn: expiresInSeconds }, (err, keyStr) => {
+        if (err) {
+          return rej(err);
+        }
+        return res(<string>keyStr);
+      });
+    });
+  }
+
+  // eslint-disable-next-line max-len
+  public static async verifyJsonWebToken<MyPayload = any>(token: string, key: string): Promise<MyPayload> {
+    return new Promise((res, rej) => {
+      jwt.verify(token, key, (err, obj) => {
+        if (err) {
+          return rej(err);
+        }
+        return res(<MyPayload>obj);
+      });
+    });
   }
 
   /** Make UUID */
