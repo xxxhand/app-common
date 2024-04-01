@@ -1,5 +1,6 @@
 import * as path from 'path';
 import * as fs from 'fs-extra';
+import { Types } from 'mongoose';
 import { CustomUtils } from '../custom-utils';
 
 describe('Custom utils test', () => {
@@ -62,7 +63,6 @@ describe('Custom utils test', () => {
 
     const pubKey = await fs.readFile(myPublicKeyFile, { encoding: encoging });
     const extractedPayload = await CustomUtils.verifyJsonWebToken<IMyPayload>(myKey, pubKey);
-    console.log(extractedPayload);
     expect(extractedPayload.name).toBe('imary');
     expect(extractedPayload.role).toBeInstanceOf(Array);
     const [admin, hr] = extractedPayload.role;
@@ -99,5 +99,10 @@ describe('Custom utils test', () => {
         expiredAt: expect.any(Date)
       }))
     }
+  })
+  test('Should return an Object id instance', () => {
+    const str = '6604e1e330cdfd694404a702';
+    const id = CustomUtils.stringToObjectId(str);
+    expect(id).toBeInstanceOf(Types.ObjectId);
   })
 });
