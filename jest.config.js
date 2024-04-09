@@ -7,7 +7,7 @@ const { defaults: tsjPreset } = require('ts-jest/presets');
 /** @type {import('jest').Config} */
 const config = {
   // All imported modules in your tests should be mocked automatically
-  // automock: false,
+  automock: false,
 
   // Stop running tests after `n` failures
   bail: 1,
@@ -122,7 +122,7 @@ const config = {
   ],
 
   // Automatically reset mock state before every test
-  // resetMocks: false,
+  resetMocks: true,
 
   // Reset the module registry before running each individual test
   // resetModules: false,
