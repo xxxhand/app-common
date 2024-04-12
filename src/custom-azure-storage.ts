@@ -1,4 +1,9 @@
-import { BlobServiceClient, ContainerClient, SASProtocol } from '@azure/storage-blob';
+import {
+  BlobDownloadResponseParsed,
+  BlobServiceClient,
+  ContainerClient,
+  SASProtocol,
+} from '@azure/storage-blob';
 
 export class CustomAzureStorage {
   // connection string
@@ -50,15 +55,14 @@ export class CustomAzureStorage {
   }
 
   // Download file from azure storage
-  public async downloadFile(fileName: string): Promise<ReadableStream | undefined> {
+  public async downloadFile(fileName: string): Promise<BlobDownloadResponseParsed> {
     if (!this._blobServiceClient) {
       throw new Error(`${this._error_prefix} The blob service client is not initial`);
     }
     const containerClient = this._blobServiceClient.getContainerClient(this._containerName);
     const blobClient = containerClient.getBlockBlobClient(fileName);
-    if (!blobClient.exists()) throw new Error(`${this._error_prefix} The file is not exist`);
-    const blob = await blobClient.download();
-    return blob.readableStreamBody as ReadableStream<any> | undefined;
+    if (!await blobClient.exists()) throw new Error(`${this._error_prefix} The file is not exist`);
+    return blobClient.download();
   }
 
   // Delete the file from azure storage
