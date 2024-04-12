@@ -57,7 +57,7 @@ export class CustomAzureStorage {
     const containerClient = this._blobServiceClient.getContainerClient(this._containerName);
     const blobClient = containerClient.getBlockBlobClient(fileName);
     if (!blobClient.exists()) throw new Error(`${this._error_prefix} The file is not exist`);
-    const blob =  await blobClient.download();
+    const blob = await blobClient.download();
     return blob.readableStreamBody as ReadableStream<any> | undefined;
   }
 

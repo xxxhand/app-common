@@ -1,7 +1,7 @@
 import * as uuid from 'uuid';
 import * as _ from 'lodash';
 import * as jwt from 'jsonwebtoken';
-import { Types } from 'mongoose';
+import { ObjectId } from 'mongodb';
 import {
   BASIC_CHARS, COMPLEX_CHARS, SALT_ROUNDS, NUMS, IPrivateKeyStruct,
   DEFAULT_CRYPTO_ALG, DEFAULT_ENCODING, DEFAULT_EXPIRES_IN_SECONDS,
@@ -87,7 +87,7 @@ export class CustomUtils {
   }
 
   /** Convert string to Object id of mongodb */
-  public static stringToObjectId = (str: string): Types.ObjectId => new Types.ObjectId(str);
+  public static stringToObjectId = (str: string): ObjectId => new ObjectId(str);
 
   private static _generateRandomValues(len: number, chars: string): string {
     const buf: string[] = [];
