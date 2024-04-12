@@ -1,6 +1,6 @@
 import * as path from 'path';
 import * as fs from 'fs-extra';
-import { Types } from 'mongoose';
+import { ObjectId } from 'mongodb';
 import { CustomUtils } from '../custom-utils';
 
 describe('Custom utils test', () => {
@@ -103,6 +103,6 @@ describe('Custom utils test', () => {
   test('Should return an Object id instance', () => {
     const str = '6604e1e330cdfd694404a702';
     const id = CustomUtils.stringToObjectId(str);
-    expect(id).toBeInstanceOf(Types.ObjectId);
+    expect(id).toBeInstanceOf(ObjectId);
   })
 });

@@ -49,3 +49,13 @@ export const DEFAULT_CRYPTO_ALG = 'RS256';
 // Default expires in one hour
 export const DEFAULT_EXPIRES_IN_SECONDS = 60 * 60 * 1;
 export const DEFAULT_FIREBASE_NAME = 'COMMON_FIREBASE';
+
+// For mongo database options
+export interface IMongoOptions {
+	minPoolSize: number;
+	maxPoolSize: number;
+	connectTimeoutMS: number;
+	user?: string;
+	pass?: string;
+	db: string;
+}
