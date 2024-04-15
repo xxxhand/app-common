@@ -7,7 +7,8 @@ describe.skip('Mongo client test', () => {
       minPoolSize: 1,
       maxPoolSize: 10,
       connectTimeoutMS: 30 * 1000,
-      db: 'hand_test'
+      db: 'hand_test',
+      directConnect: true,
     };
     const uri = `mongodb://localhost:27017/${opt.db}`;
     const colName = 'handTest';

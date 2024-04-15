@@ -27,6 +27,7 @@ export class CustomMongoClient {
     minPoolSize: 1,
     maxPoolSize: 10,
     connectTimeoutMS: 30 * 1000,
+    directConnection: false,
   };
 
   private readonly _error_prefix = '[custom-mongo-client]';
@@ -44,6 +45,7 @@ export class CustomMongoClient {
     this._defaultOptions.minPoolSize = options.minPoolSize;
     this._defaultOptions.maxPoolSize = options.maxPoolSize;
     this._defaultOptions.connectTimeoutMS = options.connectTimeoutMS;
+    this._defaultOptions.directConnection = options.directConnect;
     if (options.user && options.user.length > 0) {
       this._defaultOptions.auth = {
         username: options.user,

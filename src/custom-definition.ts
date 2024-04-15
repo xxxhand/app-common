@@ -18,6 +18,7 @@ export enum validateStrategy {
 	NON_EMPTY_ARRAY = 'isNonEmptyArray',
 	IS_EMAIL = 'isEmail',
 	IS_NUMBER = 'isNumber',
+	IS_OBJECT_ID = 'isObjectId'
 }
 export type validateFunc = (val: any) => boolean;
 export interface IValidateRule {
@@ -58,4 +59,5 @@ export interface IMongoOptions {
 	user?: string;
 	pass?: string;
 	db: string;
+	directConnect: boolean;
 }

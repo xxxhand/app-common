@@ -77,4 +77,14 @@ describe('custom validator test', () => {
     expect(() => CustomValidator.isEqual('k', 'j', 'Not match')).toThrowError('Not match');
     done();
   });
+  test('[static method] is a valid object id', (done) => {
+    const str = '6604e1e330cdfd694404a702';
+    expect(CustomValidator.isObjectId(str)).toBe(true);
+    done();
+  });
+  test('[static method] is not a valid object id', (done) => {
+    const str = '1234';
+    expect(CustomValidator.isObjectId(str)).toBe(false);
+    done();
+  });
 });

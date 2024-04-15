@@ -89,9 +89,6 @@ export class CustomUtils {
   /** Convert string to Object id of mongodb */
   public static stringToObjectId = (str: string): ObjectId => new ObjectId(str);
 
-  /** Check string belong Object id */
-  public static isObjectId = (str: string): boolean => ObjectId.isValid(str);
-
   private static _generateRandomValues(len: number, chars: string): string {
     const buf: string[] = [];
     for (let i = 0; i < len; i += 1) {

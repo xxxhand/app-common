@@ -1,4 +1,5 @@
 import * as _ from 'lodash';
+import { ObjectId } from 'mongodb';
 import { CustomError } from './custom-error';
 import { validateStrategy, validateFunc, IValidateRule } from './custom-definition';
 
@@ -15,7 +16,9 @@ const _nonEmptyArray: validateFunc = (val: Array<any>): boolean => val
 
 const _isNumber: validateFunc = (val: any): boolean => typeof val === 'number';
 
-const _isEmail:validateFunc = (val: any): boolean => /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(val);
+const _isEmail: validateFunc = (val: any): boolean => /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(val);
+
+const _isObjectId: validateFunc = (val: any): boolean => ObjectId.isValid(val);
 
 export class CustomValidator {
   private static readonly _funcs = new Map<string, validateFunc>()
@@ -97,6 +100,15 @@ export class CustomValidator {
     const res = _.isEqual(val1, val2);
     if (!res && _nonEmptyString(message)) {
       throw new CustomError(message || 'Not match');
+    }
+    return res;
+  }
+
+  /** Check string belong Object id */
+  public static isObjectId(val: any, message?: string): boolean {
+    const res = _isObjectId(val);
+    if (!res && _nonEmptyString(message)) {
+      throw new CustomError(message || 'Not a number');
     }
     return res;
   }
