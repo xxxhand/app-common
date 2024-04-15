@@ -7,14 +7,19 @@ import { IMongoOptions } from './custom-definition';
 export class CustomMongoClient {
   /** Connect uri string */
   private _uri: string;
+
   /** mongo client instance */
   private _instance: MongoClient;
+
   /** true if connect to database done */
   private _isConnected: boolean = false;
+
   /** retry connecting times */
   private _numberOfRetries: number = 1;
+
   /** database name */
   private _dbName: string = '';
+
   /** database instance */
   private _db?: Db = undefined;
 
