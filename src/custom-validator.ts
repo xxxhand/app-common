@@ -56,7 +56,7 @@ export class CustomValidator {
   }
 
   /** Check input string is empty or not, throws error if needed  */
-  public nonEmptyStringThrows(val: string, message?: string): CustomValidator {
+  public nonEmptyStringThrows(val: any, message?: string): CustomValidator {
     if (!_nonEmptyString(val)) {
       throw new CustomError(message || 'Empty string');
     }
@@ -64,7 +64,7 @@ export class CustomValidator {
   }
 
   /** Check input is  number or not, throws error if needed  */
-  public isNumberThrows(val: number, message?: string): this {
+  public isNumberThrows(val: any, message?: string): this {
     if (!_isNumber(val)) {
       throw new CustomError(message || 'Not a number');
     }
@@ -72,7 +72,7 @@ export class CustomValidator {
   }
 
   /** Check input string is empty or not, throws error if needed  */
-  public static nonEmptyString(val?: string, message?: string): boolean {
+  public static nonEmptyString(val: any, message?: string): boolean {
     const res = _nonEmptyString(val);
     if (!res && _nonEmptyString(message)) {
       throw new CustomError(message || 'Empty string');
@@ -88,7 +88,7 @@ export class CustomValidator {
     return res;
   }
 
-  public static isNumber(val: number, message?: string): boolean {
+  public static isNumber(val: any, message?: string): boolean {
     const res = _isNumber(val);
     if (!res && _nonEmptyString(message)) {
       throw new CustomError(message || 'Not a number');
