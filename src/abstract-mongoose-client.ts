@@ -20,6 +20,11 @@ export abstract class TMongooseClient {
         connectTimeoutMS: 30 * 1000,
     };
 
+    /** New mongoose instance */
+    protected newInstance(): void {
+        this.instance = new Mongoose();
+    }
+
     /** The mongoose instance of this client */
     public get theInstance(): Mongoose {
         if (!this.instance) {
