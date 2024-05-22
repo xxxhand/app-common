@@ -1,6 +1,6 @@
 {
   "name": "@xxxhand/app-common",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "Some custom tools for working",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -70,6 +70,7 @@
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "mongodb": "^6.5.0",
+    "mongoose": "^8.4.0",
     "reflect-metadata": "^0.1.14",
     "uuid": "^9.0.1"
   }
