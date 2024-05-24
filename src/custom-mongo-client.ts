@@ -65,7 +65,7 @@ export class CustomMongoClient {
     this._instance.on('error', this._onError);
     this._instance.on('connectionClosed', this._onClose);
     await new Promise<void>((res) => {
-      this._instance.once('serverHeartbeatSucceeded', () => {
+      this._instance.once('serverHeartbeatStarted', () => {
         this._db = this._instance.db(this._dbName);
         this._isConnected = true;
         this._numberOfRetries = 1;
@@ -102,6 +102,6 @@ export class CustomMongoClient {
     this._isConnected = false;
     this._db = undefined;
     this._instance.removeAllListeners();
-    this._numberOfRetries += 1;
+    this._numberOfRetries = 0;
   };
 }
