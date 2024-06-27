@@ -47,6 +47,7 @@ export interface IPrivateKeyStruct {
 
 export const DEFAULT_ENCODING = 'utf-8';
 export const DEFAULT_CRYPTO_ALG = 'RS256';
+export const DEFAULT_REQUEST_TIMEOUT = 30;
 // Default expires in one hour
 export const DEFAULT_EXPIRES_IN_SECONDS = 60 * 60 * 1;
 export const DEFAULT_FIREBASE_NAME = 'COMMON_FIREBASE';

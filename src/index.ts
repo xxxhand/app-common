@@ -5,6 +5,8 @@ export { CustomUtils } from './custom-utils';
 export { CustomResult } from './custom-result';
 export { CustomFirebase } from './custom-firebase';
 export { CustomValidator } from './custom-validator';
+export { CustomHttpOption } from './custom-http-option';
+export { CustomHttpClient } from './custom-http-client';
 export { CustomMongoClient } from './custom-mongo-client';
 export { CustomAzureStorage } from './custom-azure-storage';
 export { TMongooseClient } from './abstract-mongoose-client';
