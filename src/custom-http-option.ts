@@ -4,19 +4,24 @@ import { DEFAULT_REQUEST_TIMEOUT } from './custom-definition';
 export class CustomHttpOption {
   /** Target request url */
   private _url: string = '';
+
   /** Request headers */
   private _headers: Map<string, string> = new Map();
+
   /** For adding parameters in body, query string, form...etc */
   private _parameters: Map<string, any> = new Map();
+
   /** For upload attachments */
   private _attachments: Map<string, Readable> = new Map();
+
   /** Return with custom result after request, default to true */
   private _useCustomResult: boolean = true;
+
   /**  Request timeout in seconds, default to 30s */
-  private _timeout: number =  DEFAULT_REQUEST_TIMEOUT * 1000;
+  private _timeout: number = DEFAULT_REQUEST_TIMEOUT * 1000;
 
   /** Get url */
-  public get url(): string { 
+  public get url(): string {
     return this._url;
   }
 

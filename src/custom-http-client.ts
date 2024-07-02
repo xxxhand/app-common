@@ -5,6 +5,7 @@ import { CustomHttpOption } from './custom-http-option';
 
 export class CustomHttpClient {
   private readonly _errPrefix = '[CustomHttpClient]';
+
   private readonly _errCalled = 499;
 
   /** Send request with content-type: application/json */
@@ -13,14 +14,14 @@ export class CustomHttpClient {
       url: opt.url,
       method: 'post',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       timeout: opt.timeout,
       responseType: 'json',
       data: {},
     };
     if (opt.isNotEmptyHeaders()) {
-      opt.headers.forEach((v, k) => (conf.headers!![k] = v))
+      opt.headers.forEach((v, k) => (conf.headers!![k] = v));
     }
     if (opt.isNotEmptyParameters()) {
       opt.parameters.forEach((v, k) => (conf.data!![k] = v));
@@ -30,7 +31,7 @@ export class CustomHttpClient {
     try {
       res = await axios(conf);
       if (opt.isUseCustomResult()) {
-        return new CustomResult<R>().withResult(res.data)
+        return new CustomResult<R>().withResult(res.data);
       }
       return res.data;
     } catch (ex: any) {
@@ -45,14 +46,14 @@ export class CustomHttpClient {
       url: opt.url,
       method: 'post',
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
+        'Content-Type': 'application/x-www-form-urlencoded',
       },
       timeout: opt.timeout,
       responseType: 'json',
       data: {},
     };
     if (opt.isNotEmptyHeaders()) {
-      opt.headers.forEach((v, k) => (conf.headers!![k] = v))
+      opt.headers.forEach((v, k) => (conf.headers!![k] = v));
     }
     if (opt.isNotEmptyParameters()) {
       opt.parameters.forEach((v, k) => (conf.data!![k] = v));
@@ -63,7 +64,7 @@ export class CustomHttpClient {
       conf.data = qs.stringify(conf.data);
       res = await axios(conf);
       if (opt.isUseCustomResult()) {
-        return new CustomResult<R>().withResult(res.data)
+        return new CustomResult<R>().withResult(res.data);
       }
       return res.data;
     } catch (ex: any) {
