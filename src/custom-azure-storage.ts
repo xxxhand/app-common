@@ -3,6 +3,7 @@ import {
   BlobServiceClient,
   ContainerClient,
   SASProtocol,
+  BlobSASPermissions,
 } from '@azure/storage-blob';
 
 export class CustomAzureStorage {
@@ -88,13 +89,14 @@ export class CustomAzureStorage {
   }
 
   // Create blob SAS token
-  public async createBlobSasToken(fileName: string, duration: number): Promise<string> {
+  public async createBlobSasToken(fileName: string, duration: number, permissions: string = 'r'): Promise<string> {
     if (!this._blobServiceClient) {
       throw new Error(`${this._error_prefix} The blob service client is not initial`);
     }
     const containerClient = this._blobServiceClient.getContainerClient(this._containerName);
     const blobClient = containerClient.getBlockBlobClient(fileName);
     const sasToken = await blobClient.generateSasUrl({
+      permissions: BlobSASPermissions.parse(permissions),
       protocol: SASProtocol.Https,
       startsOn: new Date(),
       expiresOn: new Date(new Date().getTime() + duration),

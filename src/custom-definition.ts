@@ -62,3 +62,11 @@ export interface IMongoOptions {
 	db: string;
 	directConnect: boolean;
 }
+
+// For redis database options
+export interface IRedisOptions {
+	host: string;
+	port: number;
+	password: string;
+	db: number;
+}
