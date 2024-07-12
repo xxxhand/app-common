@@ -16,11 +16,6 @@ export abstract class TRedisClient {
   /** Mongoose instance */
   protected instance: TNullable<ioredis.Redis> = null;
 
-  /** New redis instance */
-  protected newInstance(): void {
-    this.instance = new ioredis.Redis();
-  }
-
   /** The redis instance of this client */
   public get theInstance(): ioredis.Redis {
     if (!this.instance) {
