@@ -1,6 +1,6 @@
 {
   "name": "@xxxhand/app-common",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "description": "Some custom tools for working",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
