@@ -60,7 +60,6 @@ export interface IMongoOptions {
 	user?: string;
 	pass?: string;
 	db: string;
-	directConnect: boolean;
 }
 
 // For redis database options
