@@ -1,4 +1,4 @@
-import mongoose, {
+import {
   Mongoose, ConnectOptions, Connection, Schema, Model, Document,
 } from 'mongoose';
 import { TNullable } from './custom-definition';
