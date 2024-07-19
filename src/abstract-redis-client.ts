@@ -42,10 +42,10 @@ export abstract class TRedisClient {
   };
 
   private _onClose = (): void => {
-    console.log(`${this.errPrefix} Db client close`);
+    console.log(`${this.errPrefix} Redis client close`);
   };
 
   private _onConnected = (): void => {
-    console.log(`${this.errPrefix} Db client connected`);
+    console.log(`${this.errPrefix} Redis client connected`);
   };
 }

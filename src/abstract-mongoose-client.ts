@@ -45,7 +45,10 @@ export abstract class TMongooseClient {
 
   /** Try connect to mongo db */
   public async tryConnect(): Promise<void> {
-    this.conn = mongoose.createConnection(this.uri, this.opt);
+    if (!this.instance) {
+      this.newInstance();
+    }
+    this.conn = this.instance!!.createConnection(this.uri, this.opt);
     this.conn.on('connected', this._onConnected);
     this.conn.on('error', this._onError);
     this.conn.on('close', this._onClose);
