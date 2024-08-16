@@ -11,5 +11,6 @@ export { CustomMongoClient } from './custom-mongo-client';
 export { CustomAzureStorage } from './custom-azure-storage';
 export { TMongooseClient } from './abstract-mongoose-client';
 export { TRedisClient } from './abstract-redis-client';
+export { TEasyTranslator } from './abstract-easy-translator';
 
 export * as CustomDefinition from './custom-definition';
