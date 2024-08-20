@@ -10,19 +10,19 @@ describe('Custom utils test', () => {
   const myPassphase = '1234';
   const encoging = 'utf-8';
 
-  test('Convert string to base64 success', () => {
+  test('[fromStringToBase64] Convert string to base64 success', () => {
     const inputString = 'I am test';
     const base64 = 'SSBhbSB0ZXN0';
     const res = CustomUtils.fromStringToBase64(inputString);
     expect(res).toBe(base64);
   });
-  test('Convert base64 to string success', () => {
+  test('[fromBase64ToString] Convert base64 to string success', () => {
     const inputString = 'I am test';
     const base64 = 'SSBhbSB0ZXN0';
     const res = CustomUtils.fromBase64ToString(base64);
-    expect(res).toBe(inputString)
+    expect(res).toBe(inputString);
   });
-  test('Clone object success', () => {
+  test('[clone] Clone object success', () => {
     const a = {
       name: 'I am Hand',
       age: 30,
@@ -31,16 +31,16 @@ describe('Custom utils test', () => {
     const b = CustomUtils.clone(a);
     expect(b).toEqual(a);
   });
-  test('Make random string w/ specific length', () => {
+  test('[makeRandomString] Make random string w/ specific length', () => {
     const res = CustomUtils.makeRandomString(10);
     expect(res).toHaveLength(10);
   });
-  test('Make random numbers w/ specific length', () => {
+  test('[makeRandomNumbers] Make random numbers w/ specific length', () => {
     const res = CustomUtils.makeRandomNumbers(4);
     expect(/\d/.test(res)).toBe(true)
     expect(res).toHaveLength(4);
   });
-  test('Should success while generate json web token w/ private key', async () => {
+  test('[makeJsonWebToken] Should success while generate json web token w/ private key', async () => {
     const pKeyStr = await fs.readFile(myPrivateKeyFile, { encoding: encoging });
     const payload = {
       userId: 'xxxhand',
@@ -49,7 +49,7 @@ describe('Custom utils test', () => {
     const myKey = await CustomUtils.makeJsonWebToken(payload, { key: pKeyStr, passphrase: myPassphase });
     expect(jwtRegex.test(myKey)).toBe(true);
   })
-  test('Should success while parse json web token w/ public key', async () => {
+  test('[verifyJsonWebToken] Should success while parse json web token w/ public key', async () => {
     const pKeyStr = await fs.readFile(myPrivateKeyFile, { encoding: encoging });
     interface IMyPayload {
       name: string;
@@ -69,7 +69,7 @@ describe('Custom utils test', () => {
     expect(admin).toBe('admin');
     expect(hr).toBe('hr');
   })
-  test('Should fail while generate json web token w/ wrong private key', async () => {
+  test('[makeJsonWebToken] Should fail while generate json web token w/ wrong private key', async () => {
     const pKeyStr = await fs.readFile(myPrivateKeyFile, { encoding: encoging });
     const payload = {
       userId: 'xxxhand',
@@ -81,7 +81,7 @@ describe('Custom utils test', () => {
       expect(error).toBeInstanceOf(Error);
     }
   })
-  test('Should fail while parsed json web token expired',async () => {
+  test('[verifyJsonWebToken] Should fail while parsed json web token expired', async () => {
     const pKeyStr = await fs.readFile(myPrivateKeyFile, { encoding: encoging });
     const payload = {
       userId: 'xxxhand',
@@ -97,12 +97,35 @@ describe('Custom utils test', () => {
         name: expect.any(String),
         message: 'jwt expired',
         expiredAt: expect.any(Date)
-      }))
+      }));
     }
   })
-  test('Should return an Object id instance', () => {
+  test('[stringToObjectId] Should return an Object id instance', () => {
     const str = '6604e1e330cdfd694404a702';
     const id = CustomUtils.stringToObjectId(str);
     expect(id).toBeInstanceOf(ObjectId);
-  })
+  });
+  test('[getLangOrDefault]Should return default lang', () => {
+    let lang: any = undefined;
+    expect(CustomUtils.getLangOrDefault(lang)).toBe('dev');
+    lang = null;
+    expect(CustomUtils.getLangOrDefault(lang)).toBe('dev');
+    lang = '';
+    expect(CustomUtils.getLangOrDefault(lang)).toBe('dev');
+    lang = '*';
+    expect(CustomUtils.getLangOrDefault(lang)).toBe('dev');
+
+  });
+  test('[getLangOrDefault] Should return lang: zh-tw', () => {
+    let lang: any = 'zh-TW,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6,ja;q=0.5,zh-CN;q=0.4,zh-HK;q=0.3';
+    expect(CustomUtils.getLangOrDefault(lang)).toBe('zh-TW');
+    lang = 'zh-TW';
+    expect(CustomUtils.getLangOrDefault(lang)).toBe('zh-TW');
+    lang = 'zh-TW,*';
+    expect(CustomUtils.getLangOrDefault(lang)).toBe('zh-TW');
+    lang = '*,zh-TW';
+    expect(CustomUtils.getLangOrDefault(lang)).toBe('zh-TW');
+    lang = 'zh,en,ja';
+    expect(CustomUtils.getLangOrDefault(lang)).toBe('zh');
+  });
 });

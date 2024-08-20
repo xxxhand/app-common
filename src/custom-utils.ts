@@ -5,6 +5,7 @@ import { ObjectId } from 'mongodb';
 import {
   BASIC_CHARS, COMPLEX_CHARS, SALT_ROUNDS, NUMS, IPrivateKeyStruct,
   DEFAULT_CRYPTO_ALG, DEFAULT_ENCODING, DEFAULT_EXPIRES_IN_SECONDS,
+  DEFAULT_LANG
 } from './custom-definition';
 
 export class CustomUtils {
@@ -88,6 +89,25 @@ export class CustomUtils {
 
   /** Convert string to Object id of mongodb */
   public static stringToObjectId = (str: string): ObjectId => new ObjectId(str);
+
+  /** Get lang from accept-language, it would return `dev` if the defaultLang is empty */
+  public static getLangOrDefault(inputLangs?: string, defaultLang: string = DEFAULT_LANG): string {
+    if (!(inputLangs && (typeof inputLangs === 'string') && inputLangs.length > 0)) {
+      return defaultLang;
+    }
+    return inputLangs
+      .split(',')
+      .map(lang => {
+        const [locale, qValue] = lang.trim().split(';q=');
+        return { locale: locale.trim(), q: parseFloat(qValue) || (locale === '*' ? 0 : 1.0) };
+      })
+      .sort((a, b) => b.q - a.q)[0].locale === '*' ? defaultLang : inputLangs.split(',')
+        .map(lang => {
+          const [locale, qValue] = lang.trim().split(';q=');
+          return { locale: locale.trim(), q: parseFloat(qValue) || (locale === '*' ? 0 : 1.0) };
+        })
+        .sort((a, b) => b.q - a.q)[0].locale;
+  }
 
   private static _generateRandomValues(len: number, chars: string): string {
     const buf: string[] = [];
