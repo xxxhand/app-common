@@ -134,3 +134,6 @@ test-result
 
 # Apple Mac
 .DS_Store
+
+# local test file
+mytry.ts

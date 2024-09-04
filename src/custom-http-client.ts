@@ -72,4 +72,34 @@ export class CustomHttpClient {
       return new CustomResult().withCode(this._errCalled).withMessage(`${this._errPrefix} ${conf.method} ${conf.url} fail: ${ex}`).withResult(conf);
     }
   }
+
+  public async tryGetJson<R = any>(opt: CustomHttpOption): Promise<CustomResult<R> | R> {
+    const conf: AxiosRequestConfig = {
+      url: opt.url,
+      method: 'get',
+      headers: {},
+      timeout: opt.timeout,
+      responseType: 'json',
+    };
+    if (opt.isNotEmptyHeaders()) {
+      opt.headers.forEach((v, k) => (conf.headers!![k] = v));
+    }
+    if (opt.isNotEmptyParameters()) {
+      const data: Record<string, any> = {};
+      opt.parameters.forEach((v, k) => (data[k] = v));
+      conf.url = `${opt.url}?${qs.stringify(data)}`;
+    }
+
+    let res: AxiosResponse;
+    try {
+      res = await axios(conf);
+      if (opt.isUseCustomResult()) {
+        return new CustomResult<R>().withResult(res.data);
+      }
+      return res.data;
+    } catch (ex: any) {
+      console.error(`${this._errPrefix} ${ex}`);
+      return new CustomResult().withCode(this._errCalled).withMessage(`${this._errPrefix} ${conf.method} ${conf.url} fail: ${ex}`).withResult(conf);
+    }
+  }
 }
