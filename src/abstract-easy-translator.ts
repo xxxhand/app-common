@@ -55,9 +55,9 @@ export abstract class TEasyTranslator {
         throw new Error(`${this.errPrefix} Input path ${this.resourcesPath} must have at least one file named ${this.fallbackLng}${this.supportExtenstion}`);
       }
       for (let i = 0; i < acceptedFiles.length; i++) {
-        const lng = files[i].substring(0, files[i].lastIndexOf(this.supportExtenstion));
+        const lng = acceptedFiles[i].substring(0, acceptedFiles[i].lastIndexOf(this.supportExtenstion));
         console.log(`${this.errPrefix} Load support lang: ${lng}`);
-        const content = await fs.readFile(`${this.resourcesPath}/${files[i]}`, { encoding: 'utf-8' });
+        const content = await fs.readFile(`${this.resourcesPath}/${acceptedFiles[i]}`, { encoding: 'utf-8' });
         this.translationDictionary.set(lng.toLowerCase(), JSON.parse(content));
       }
     }
