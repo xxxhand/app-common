@@ -5,6 +5,7 @@ import {
   SASProtocol,
   BlobSASPermissions,
 } from '@azure/storage-blob';
+import { Buffer } from 'buffer';
 
 export class CustomAzureStorage {
   // connection string
@@ -45,14 +46,20 @@ export class CustomAzureStorage {
   }
 
   // Upload file to azure storage
-  public async uploadFile(sourceFile: string, targetFile: string): Promise<void> {
+  public async uploadFile(source: Buffer | string, targetFile: string): Promise<void> {
     if (!this._blobServiceClient) {
       throw new Error(`${this._error_prefix} The blob service client is not initial`);
     }
     const containerClient = this._blobServiceClient.getContainerClient(this._containerName);
     if (!await containerClient.exists()) await containerClient.create();
     const blobClient = containerClient.getBlockBlobClient(targetFile);
-    await blobClient.uploadFile(sourceFile);
+    if (typeof source === 'string') {
+      // Upload file from local file path
+      await blobClient.uploadFile(source);
+    } else {
+      // Upload file from buffer
+      await blobClient.upload(source, source.length);
+    }
   }
 
   // Download file from azure storage
