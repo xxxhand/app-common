@@ -40,6 +40,37 @@ export class CustomHttpClient {
     }
   }
 
+  public async tryPatchJson<R = any>(opt: CustomHttpOption): Promise<CustomResult<R> | R> {
+    const conf: AxiosRequestConfig = {
+      url: opt.url,
+      method: 'patch',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      timeout: opt.timeout,
+      responseType: 'json',
+      data: {},
+    };
+    if (opt.isNotEmptyHeaders()) {
+      opt.headers.forEach((v, k) => (conf.headers!![k] = v));
+    }
+    if (opt.isNotEmptyParameters()) {
+      opt.parameters.forEach((v, k) => (conf.data!![k] = v));
+    }
+
+    let res: AxiosResponse;
+    try {
+      res = await axios(conf);
+      if (opt.isUseCustomResult()) {
+        return new CustomResult<R>().withResult(res.data);
+      }
+      return res.data;
+    } catch (ex: any) {
+      console.error(`${this._errPrefix} ${ex}`);
+      return new CustomResult().withCode(this._errCalled).withMessage(`${this._errPrefix} ${conf.method} ${conf.url} fail: ${ex}`).withResult(conf);
+    }
+  }
+
   /** Send request with content-type: application/x-www-form-urlencoded */
   public async tryPostUrlEncode<R = any>(opt: CustomHttpOption): Promise<CustomResult<R> | R> {
     const conf: AxiosRequestConfig = {
