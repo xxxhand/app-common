@@ -13,6 +13,9 @@ export class CustomFirebase {
   /** Firebase credential file path */
   private _credentialFile: string = '';
 
+  /** Service account for authorization */
+  private _account: TNullable<ServiceAccount> = null;
+
   /** Name of the filrebase instance */
   private _instanceName: string = DEFAULT_FIREBASE_NAME;
 
@@ -33,6 +36,12 @@ export class CustomFirebase {
   /** Set credential file path */
   public useCredentialFile(absoluteCredentialPath: string): CustomFirebase {
     this._credentialFile = absoluteCredentialPath;
+    return this;
+  }
+
+  /** Set service account, one of useCredentialFile or this method need to be called */
+  public useServiceAccount(account: ServiceAccount): CustomFirebase {
+    this._account = account;
     return this;
   }
 
@@ -57,8 +66,11 @@ export class CustomFirebase {
 
   /** Initial firebase instance */
   public initial(): CustomFirebase {
-    const account = this._readCredentialAsServiceAccount();
-    this._appInstance = initializeApp({ credential: credential.cert(account) }, this._instanceName);
+    this._readCredentialAsServiceAccount();
+    if (!this._account) {
+      throw new Error(`${this._error_prefix} Service account is not setted`);
+    }
+    this._appInstance = initializeApp({ credential: credential.cert(this._account) }, this._instanceName);
     this._messaging = getMessaging(this._appInstance);
     this._firestore = getFirestore(this._appInstance);
     return this;
@@ -84,11 +96,13 @@ export class CustomFirebase {
   }
 
   /** Read credential file */
-  private _readCredentialAsServiceAccount(): ServiceAccount {
+  private _readCredentialAsServiceAccount(): void {
+    if (this._account) {
+      return;
+    }
     try {
       const str = fs.readFileSync(this._credentialFile, { encoding: DEFAULT_ENCODING });
-      const account = JSON.parse(str) as ServiceAccount;
-      return account;
+      this._account = JSON.parse(str) as ServiceAccount;
     } catch {
       throw new Error(`${this._error_prefix} Read credential file fail`);
     }
