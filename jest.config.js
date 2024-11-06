@@ -19,13 +19,13 @@ const config = {
   clearMocks: true,
 
   // Indicates whether the coverage information should be collected while executing the test
-  collectCoverage: true,
+  collectCoverage: false,
 
   // An array of glob patterns indicating a set of files for which coverage information should be collected
   // collectCoverageFrom: undefined,
 
   // The directory where Jest should output its coverage files
-  coverageDirectory: './test-result/coverage',
+  // coverageDirectory: './test-result/coverage',
 
   // An array of regexp pattern strings used to skip coverage collection
   coveragePathIgnorePatterns: [
@@ -109,16 +109,16 @@ const config = {
 
   // Use this configuration option to add custom reporters to Jest
   reporters: [
-    'default',
-    [
-      './node_modules/jest-html-reporters',
-      {
-        pageTitle: 'Test report',
-        publicPath: './test-result/report',
-        filename: 'index.html',
-        expand: false,
-      }
-    ]
+    // 'default',
+    // [
+    //   './node_modules/jest-html-reporters',
+    //   {
+    //     pageTitle: 'Test report',
+    //     publicPath: './test-result/report',
+    //     filename: 'index.html',
+    //     expand: false,
+    //   }
+    // ]
   ],
 
   // Automatically reset mock state before every test
