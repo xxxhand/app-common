@@ -2,7 +2,7 @@ import { Readable } from 'node:stream';
 import * as nodemailer from 'nodemailer';
 import { CustomValidator } from './custom-validator';
 import { TNullable } from './custom-definition';
- 
+
 export interface IAttachement {
   fileName: string;
   contentType?: string;
@@ -32,12 +32,13 @@ export interface IInitialConfig {
 
 export class CustomMailClient {
   private readonly _errPrefix = '[CustomMailClient]';
+
   private _instance: TNullable<nodemailer.Transporter>;
 
   /** Initial SMTP Pool through config */
   public initialSmtpPool(conf: IInitialConfig): void {
     const newOpt: any = {
-      secure: conf.port === 465 ? true : false,
+      secure: conf.port === 465,
       pool: true,
       host: conf.host,
       port: conf.port,
@@ -83,12 +84,10 @@ export class CustomMailClient {
     };
 
     if (opts.attachments && CustomValidator.nonEmptyArray(opts.attachments)) {
-      opts.attachments.forEach((x) =>
-        newOpt.attachments.push({
-          filename: x.fileName,
-          content: x.content,
-        }),
-      );
+      opts.attachments.forEach((x) => newOpt.attachments.push({
+        filename: x.fileName,
+        content: x.content,
+      }));
     }
 
     return this._instance.sendMail(newOpt);

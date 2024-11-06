@@ -5,7 +5,7 @@ import { ObjectId } from 'mongodb';
 import {
   BASIC_CHARS, COMPLEX_CHARS, SALT_ROUNDS, NUMS, IPrivateKeyStruct,
   DEFAULT_CRYPTO_ALG, DEFAULT_ENCODING, DEFAULT_EXPIRES_IN_SECONDS,
-  DEFAULT_LANG
+  DEFAULT_LANG,
 } from './custom-definition';
 
 export class CustomUtils {
@@ -97,12 +97,12 @@ export class CustomUtils {
     }
     return inputLangs
       .split(',')
-      .map(lang => {
+      .map((lang) => {
         const [locale, qValue] = lang.trim().split(';q=');
         return { locale: locale.trim(), q: parseFloat(qValue) || (locale === '*' ? 0 : 1.0) };
       })
       .sort((a, b) => b.q - a.q)[0].locale === '*' ? defaultLang : inputLangs.split(',')
-        .map(lang => {
+        .map((lang) => {
           const [locale, qValue] = lang.trim().split(';q=');
           return { locale: locale.trim(), q: parseFloat(qValue) || (locale === '*' ? 0 : 1.0) };
         })
