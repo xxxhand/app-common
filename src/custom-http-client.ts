@@ -1,3 +1,4 @@
+/* eslint-disable no-return-assign */
 import qs from 'qs';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { CustomResult } from './custom-result';
@@ -35,8 +36,9 @@ export class CustomHttpClient {
       }
       return res.data;
     } catch (ex: any) {
-      console.error(`${this._errPrefix} ${ex}`);
-      return new CustomResult().withCode(this._errCalled).withMessage(`${this._errPrefix} ${conf.method} ${conf.url} fail: ${ex}`).withResult(conf);
+      // eslint-disable-next-line no-console
+      console.error(`${this._errPrefix} ${ex.stack}`);
+      return new CustomResult().withCode(this._errCalled).withMessage(`${this._errPrefix} ${conf.method} ${conf.url} fail: ${ex.message}`).withResult(conf);
     }
   }
 
@@ -66,8 +68,9 @@ export class CustomHttpClient {
       }
       return res.data;
     } catch (ex: any) {
-      console.error(`${this._errPrefix} ${ex}`);
-      return new CustomResult().withCode(this._errCalled).withMessage(`${this._errPrefix} ${conf.method} ${conf.url} fail: ${ex}`).withResult(conf);
+      // eslint-disable-next-line no-console
+      console.error(`${this._errPrefix} ${ex.stack}`);
+      return new CustomResult().withCode(this._errCalled).withMessage(`${this._errPrefix} ${conf.method} ${conf.url} fail: ${ex.message}`).withResult(conf);
     }
   }
 
@@ -99,8 +102,9 @@ export class CustomHttpClient {
       }
       return res.data;
     } catch (ex: any) {
-      console.error(`${this._errPrefix} ${ex}`);
-      return new CustomResult().withCode(this._errCalled).withMessage(`${this._errPrefix} ${conf.method} ${conf.url} fail: ${ex}`).withResult(conf);
+      // eslint-disable-next-line no-console
+      console.error(`${this._errPrefix} ${ex.stack}`);
+      return new CustomResult().withCode(this._errCalled).withMessage(`${this._errPrefix} ${conf.method} ${conf.url} fail: ${ex.message}`).withResult(conf);
     }
   }
 
@@ -129,8 +133,9 @@ export class CustomHttpClient {
       }
       return res.data;
     } catch (ex: any) {
-      console.error(`${this._errPrefix} ${ex}`);
-      return new CustomResult().withCode(this._errCalled).withMessage(`${this._errPrefix} ${conf.method} ${conf.url} fail: ${ex}`).withResult(conf);
+      // eslint-disable-next-line no-console
+      console.error(`${this._errPrefix} ${ex.stack}`);
+      return new CustomResult().withCode(this._errCalled).withMessage(`${this._errPrefix} ${conf.method} ${conf.url} fail: ${ex.message}`).withResult(conf);
     }
   }
 }
