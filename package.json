@@ -43,7 +43,7 @@
     "@types/jest": "^29.5.5",
     "@types/jsonwebtoken": "^9.0.5",
     "@types/lodash": "^4.14.202",
-    "@types/node": "^20.8.4",
+    "@types/node": "^22.14.1",
     "@types/nodemailer": "^6.4.16",
     "@types/qs": "^6.9.15",
     "@types/uuid": "^9.0.7",

@@ -34,6 +34,10 @@ export const OTHER_ERROR_CODE_NAME = 'ERR_OTHERS';
 export const OTHER_ERROR_CODE = 99999;
 export const OTHER_ERROR_MSG = 'Ops! Exception';
 
+export const TIMEOUT_ERROR_CODE_NAME = 'ERR_TIMEOUT';
+export const TIMEOUT_ERROR_CODE = 99998;
+export const TIMEOUT_ERROR_MSG = 'Ops! Timeout';
+
 export const BASIC_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 export const COMPLEX_CHARS = `${BASIC_CHARS}!@#$%&*.+-;`;
 export const NUMS = '0123456789';

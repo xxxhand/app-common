@@ -54,7 +54,7 @@ export abstract class TEasyTranslator {
       if (!CustomValidator.nonEmptyArray(acceptedFiles)) {
         throw new Error(`${this.errPrefix} Input path ${this.resourcesPath} must have at least one file named ${this.fallbackLng}${this.supportExtenstion}`);
       }
-      for (let i = 0; i < acceptedFiles.length; i++) {
+      for (let i = 0; i < acceptedFiles.length; i += 1) {
         const lng = acceptedFiles[i].substring(0, acceptedFiles[i].lastIndexOf(this.supportExtenstion));
         console.log(`${this.errPrefix} Load support lang: ${lng}`);
         const content = await fs.readFile(`${this.resourcesPath}/${acceptedFiles[i]}`, { encoding: 'utf-8' });

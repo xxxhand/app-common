@@ -12,5 +12,7 @@ export { CustomAzureStorage } from './custom-azure-storage';
 export { TMongooseClient } from './abstract-mongoose-client';
 export { TRedisClient } from './abstract-redis-client';
 export { TEasyTranslator } from './abstract-easy-translator';
+export { CustomTimer } from './custom-timer';
+// eslint-disable-next-line object-curly-newline
 export { CustomMailClient, IAttachement, IInitialConfig, ISendOptions } from './custom-mail-client';
 export * as CustomDefinition from './custom-definition';
