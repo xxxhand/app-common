@@ -1,6 +1,7 @@
+/* eslint-disable object-curly-newline */
 /* eslint-disable no-return-assign */
 import qs from 'qs';
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse, isAxiosError, AxiosError } from 'axios';
 import { CustomResult } from './custom-result';
 import { CustomHttpOption } from './custom-http-option';
 
@@ -36,7 +37,13 @@ export class CustomHttpClient {
       }
       return res.data;
     } catch (ex: any) {
-      // eslint-disable-next-line no-console
+      if (isAxiosError(ex)) {
+        const err = <AxiosError>ex;
+        if (err.response && err.response.data) {
+          console.error(`${this._errPrefix} status: ${err.status}, data: ${JSON.stringify(err.response.data)}`);
+          return new CustomResult().withCode(err.response.status).withMessage(`${this._errPrefix} ${conf.method} ${conf.url} fail: ${err.message}`).withResult(err.response.data);
+        }
+      }
       console.error(`${this._errPrefix} ${ex.stack}`);
       return new CustomResult().withCode(this._errCalled).withMessage(`${this._errPrefix} ${conf.method} ${conf.url} fail: ${ex.message}`).withResult(conf);
     }
@@ -68,7 +75,13 @@ export class CustomHttpClient {
       }
       return res.data;
     } catch (ex: any) {
-      // eslint-disable-next-line no-console
+      if (isAxiosError(ex)) {
+        const err = <AxiosError>ex;
+        if (err.response && err.response.data) {
+          console.error(`${this._errPrefix} status: ${err.status}, data: ${JSON.stringify(err.response.data)}`);
+          return new CustomResult().withCode(err.response.status).withMessage(`${this._errPrefix} ${conf.method} ${conf.url} fail: ${err.message}`).withResult(err.response.data);
+        }
+      }
       console.error(`${this._errPrefix} ${ex.stack}`);
       return new CustomResult().withCode(this._errCalled).withMessage(`${this._errPrefix} ${conf.method} ${conf.url} fail: ${ex.message}`).withResult(conf);
     }
@@ -102,7 +115,13 @@ export class CustomHttpClient {
       }
       return res.data;
     } catch (ex: any) {
-      // eslint-disable-next-line no-console
+      if (isAxiosError(ex)) {
+        const err = <AxiosError>ex;
+        if (err.response && err.response.data) {
+          console.error(`${this._errPrefix} status: ${err.status}, data: ${JSON.stringify(err.response.data)}`);
+          return new CustomResult().withCode(err.response.status).withMessage(`${this._errPrefix} ${conf.method} ${conf.url} fail: ${err.message}`).withResult(err.response.data);
+        }
+      }
       console.error(`${this._errPrefix} ${ex.stack}`);
       return new CustomResult().withCode(this._errCalled).withMessage(`${this._errPrefix} ${conf.method} ${conf.url} fail: ${ex.message}`).withResult(conf);
     }
@@ -133,7 +152,13 @@ export class CustomHttpClient {
       }
       return res.data;
     } catch (ex: any) {
-      // eslint-disable-next-line no-console
+      if (isAxiosError(ex)) {
+        const err = <AxiosError>ex;
+        if (err.response && err.response.data) {
+          console.error(`${this._errPrefix} status: ${err.status}, data: ${JSON.stringify(err.response.data)}`);
+          return new CustomResult().withCode(err.response.status).withMessage(`${this._errPrefix} ${conf.method} ${conf.url} fail: ${err.message}`).withResult(err.response.data);
+        }
+      }
       console.error(`${this._errPrefix} ${ex.stack}`);
       return new CustomResult().withCode(this._errCalled).withMessage(`${this._errPrefix} ${conf.method} ${conf.url} fail: ${ex.message}`).withResult(conf);
     }
