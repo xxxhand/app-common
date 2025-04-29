@@ -6,6 +6,12 @@ import {
   BlobSASPermissions,
 } from '@azure/storage-blob';
 import { Buffer } from 'buffer';
+import {
+  StorageSharedKeyCredential,
+  DataLakeSASPermissions,
+  generateDataLakeSASQueryParameters,
+} from '@azure/storage-file-datalake';
+import { CustomValidator } from './custom-validator';
 
 export class CustomAzureStorage {
   // connection string
@@ -19,6 +25,12 @@ export class CustomAzureStorage {
 
   private readonly _error_prefix = '[custom-azure-storage]';
 
+  private _accountName: string = '';
+
+  private _accountKey: string = '';
+
+  private _storageSharedKeyCredential: StorageSharedKeyCredential | null = null;
+
   // Set connection string
   public useConnectionString(connectionString: string): CustomAzureStorage {
     this._connectionString = connectionString;
@@ -31,9 +43,22 @@ export class CustomAzureStorage {
     return this;
   }
 
+  public useAccountName(accountName: string): CustomAzureStorage {
+    this._accountName = accountName;
+    return this;
+  }
+
+  public useAccountKey(accountKey: string): CustomAzureStorage {
+    this._accountKey = accountKey;
+    return this;
+  }
+
   // Initial azure storage instance
   public initial(): CustomAzureStorage {
-    this._blobServiceClient = BlobServiceClient.fromConnectionString(this._connectionString);
+    if (CustomValidator.nonEmptyString(this._connectionString)) this._blobServiceClient = BlobServiceClient.fromConnectionString(this._connectionString);
+    if (CustomValidator.nonEmptyString(this._accountName) && CustomValidator.nonEmptyString(this._accountKey)) {
+      this._storageSharedKeyCredential = new StorageSharedKeyCredential(this._accountName, this._accountKey);
+    }
     return this;
   }
 
@@ -109,5 +134,27 @@ export class CustomAzureStorage {
       expiresOn: new Date(new Date().getTime() + duration),
     });
     return sasToken;
+  }
+
+  // Create account storage folder SAS token
+  public generateAzureStorageSASToken(
+    containerName: string,
+    pathName: string,
+    isDirectory: boolean = false,
+    duration: number = 60 * 60 * 24,
+    permissions: string = 'r'
+  ): string {
+    if (!this._storageSharedKeyCredential) throw new Error(`${this._error_prefix} The storage shared key credential is not initial`);
+    return generateDataLakeSASQueryParameters(
+      {
+        fileSystemName: containerName,
+        startsOn: new Date(),
+        expiresOn: new Date(new Date().getTime() + duration * 1000),
+        permissions: DataLakeSASPermissions.parse(permissions),
+        pathName,
+        isDirectory,
+      },
+      this._storageSharedKeyCredential
+    ).toString();
   }
 }
