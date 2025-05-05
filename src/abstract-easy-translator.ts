@@ -65,10 +65,11 @@ export abstract class TEasyTranslator {
   }
 
   public t(key: string, locale?: string): string {
+    let currLocale = locale;
     if (!(CustomValidator.nonEmptyString(locale) && this.translationDictionary.has(locale!.toLowerCase()))) {
-      locale = this.fallbackLng;
+      currLocale = this.fallbackLng;
     }
-    const str = (this.translationDictionary.get(locale!.toLowerCase()) as Record<string, string>)[key];
+    const str = (this.translationDictionary.get(currLocale!.toLowerCase()) as Record<string, string>)[key];
     if (CustomValidator.nonEmptyString(str)) {
       return str;
     }
