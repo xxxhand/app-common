@@ -3,8 +3,14 @@ import * as _ from 'lodash';
 import * as jwt from 'jsonwebtoken';
 import { ObjectId } from 'mongodb';
 import {
-  BASIC_CHARS, COMPLEX_CHARS, SALT_ROUNDS, NUMS, IPrivateKeyStruct,
-  DEFAULT_CRYPTO_ALG, DEFAULT_ENCODING, DEFAULT_EXPIRES_IN_SECONDS,
+  BASIC_CHARS,
+  COMPLEX_CHARS,
+  SALT_ROUNDS,
+  NUMS,
+  IPrivateKeyStruct,
+  DEFAULT_CRYPTO_ALG,
+  DEFAULT_ENCODING,
+  DEFAULT_EXPIRES_IN_SECONDS,
   DEFAULT_LANG,
 } from './custom-definition';
 
@@ -13,11 +19,11 @@ export class CustomUtils {
 
   /** Pause process in seconds */
   public static async sleep(inSeconds: number): Promise<void> {
-    return new Promise(((res) => {
+    return new Promise((res) => {
       setTimeout(() => {
         res();
       }, inSeconds * 1000);
-    }));
+    });
   }
 
   /** Convert string to base64 */
@@ -92,7 +98,7 @@ export class CustomUtils {
 
   /** Get lang from accept-language, it would return `dev` if the defaultLang is empty */
   public static getLangOrDefault(inputLangs?: string, defaultLang: string = DEFAULT_LANG): string {
-    if (!(inputLangs && (typeof inputLangs === 'string') && inputLangs.length > 0)) {
+    if (!(inputLangs && typeof inputLangs === 'string' && inputLangs.length > 0)) {
       return defaultLang;
     }
     return inputLangs
@@ -101,12 +107,55 @@ export class CustomUtils {
         const [locale, qValue] = lang.trim().split(';q=');
         return { locale: locale.trim(), q: parseFloat(qValue) || (locale === '*' ? 0 : 1.0) };
       })
-      .sort((a, b) => b.q - a.q)[0].locale === '*' ? defaultLang : inputLangs.split(',')
+      .sort((a, b) => b.q - a.q)[0].locale === '*'
+      ? defaultLang
+      : inputLangs
+        .split(',')
         .map((lang) => {
           const [locale, qValue] = lang.trim().split(';q=');
           return { locale: locale.trim(), q: parseFloat(qValue) || (locale === '*' ? 0 : 1.0) };
         })
         .sort((a, b) => b.q - a.q)[0].locale;
+  }
+
+  /**
+   * 將泛型陣列依據指定的最大筆數切割成多個子陣列
+   * @param array - 要分割的陣列
+   * @param maxChunkSize - 每個子陣列的最大元素數量
+   * @returns 包含多個子陣列的二維陣列
+   * @throws 當輸入參數無效時拋出錯誤
+   */
+  public static splitArray<T = any>(inputArray: T[], maxChunkSize: number): T[][] {
+    // 檢查輸入參數
+    if (!Array.isArray(inputArray)) {
+      throw new Error('Input must be an array');
+    }
+
+    if (!Number.isInteger(maxChunkSize) || maxChunkSize <= 0) {
+      throw new Error('Chunk size must be greater than 0');
+    }
+
+    // 處理空陣列的情況
+    if (inputArray.length === 0) {
+      return [];
+    }
+    // 處理 maxChunkSize 大於或等於陣列長度的情況
+    if (maxChunkSize >= inputArray.length) {
+      return [inputArray.slice()];
+    }
+
+    // 計算需要多少個子陣列
+    const chunkCount = Math.ceil(inputArray.length / maxChunkSize);
+    // 分割陣列
+    const result: T[][] = [];
+
+    for (let i = 0; i < chunkCount; i += 1) {
+      const startIndex = i * maxChunkSize;
+      const endIndex = Math.min(startIndex + maxChunkSize, inputArray.length);
+      result.push(inputArray.slice(startIndex, endIndex));
+    }
+
+    return result;
   }
 
   private static _generateRandomValues(len: number, chars: string): string {

@@ -128,4 +128,95 @@ describe('Custom utils test', () => {
     lang = 'zh,en,ja';
     expect(CustomUtils.getLangOrDefault(lang)).toBe('zh');
   });
+  test('將陣列切割成指定大小的子陣列', () => {
+    const array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    const result = CustomUtils.splitArray(array, 3);
+    
+    expect(result).toEqual([
+      [1, 2, 3],
+      [4, 5, 6],
+      [7, 8, 9],
+      [10]
+    ]);
+  });
+
+  // 測試當 maxChunkSize 剛好整除陣列長度的情況
+  test('當 maxChunkSize 剛好整除陣列長度時', () => {
+    const array = [1, 2, 3, 4, 5, 6];
+    const result = CustomUtils.splitArray(array, 2);
+    
+    expect(result).toEqual([
+      [1, 2],
+      [3, 4],
+      [5, 6]
+    ]);
+  });
+
+  // 測試空陣列
+  test('空陣列應該回傳空的二維陣列', () => {
+    const array: number[] = [];
+    const result = CustomUtils.splitArray(array, 3);
+    
+    expect(result).toEqual([]);
+  });
+
+  // 測試 maxChunkSize 大於陣列長度的情況
+  test('當 maxChunkSize 大於陣列長度時應該回傳單一子陣列', () => {
+    const array = [1, 2, 3];
+    const result = CustomUtils.splitArray(array, 5);
+    
+    expect(result).toEqual([[1, 2, 3]]);
+  });
+
+  // 測試 maxChunkSize 等於陣列長度的情況
+  test('當 maxChunkSize 等於陣列長度時應該回傳單一子陣列', () => {
+    const array = [1, 2, 3, 4];
+    const result = CustomUtils.splitArray(array, 4);
+    
+    expect(result).toEqual([[1, 2, 3, 4]]);
+  });
+
+  // 測試泛型類型
+  test('應該能夠處理不同類型的陣列', () => {
+    // 字串陣列
+    const stringArray = ['a', 'b', 'c', 'd', 'e'];
+    const stringResult = CustomUtils.splitArray(stringArray, 2);
+    expect(stringResult).toEqual([['a', 'b'], ['c', 'd'], ['e']]);
+    
+    // 物件陣列
+    const objectArray = [
+      { id: 1, name: '張三' },
+      { id: 2, name: '李四' },
+      { id: 3, name: '王五' },
+      { id: 4, name: '趙六' }
+    ];
+    const objectResult = CustomUtils.splitArray(objectArray, 2);
+    expect(objectResult).toEqual([
+      [{ id: 1, name: '張三' }, { id: 2, name: '李四' }],
+      [{ id: 3, name: '王五' }, { id: 4, name: '趙六' }]
+    ]);
+    
+    // 混合類型陣列
+    const mixedArray: (number | string)[] = [1, 'a', 2, 'b', 3];
+    const mixedResult = CustomUtils.splitArray(mixedArray, 2);
+    expect(mixedResult).toEqual([[1, 'a'], [2, 'b'], [3]]);
+  });
+
+  // 測試非法參數
+  test('非法的 maxChunkSize 參數應該拋出錯誤', () => {
+    const array = [1, 2, 3];
+    
+    // 測試非正整數
+    expect(() => CustomUtils.splitArray(array, 0)).toThrow('Chunk size must be greater than 0');
+    expect(() => CustomUtils.splitArray(array, -1)).toThrow('Chunk size must be greater than 0');
+    
+    // 測試非整數
+    expect(() => CustomUtils.splitArray(array, 2.5)).toThrow('Chunk size must be greater than 0');
+  });
+  
+  // 測試非陣列輸入
+  test('非陣列輸入應該拋出錯誤', () => {
+    // @ts-ignore 下面這行在 TypeScript 中會報錯，但我們要測試運行時的情況
+    expect(() => CustomUtils.splitArray('not an array', 2)).toThrow('Input must be an array');
+  });
 });
