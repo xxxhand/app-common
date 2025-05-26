@@ -1,7 +1,5 @@
 /* eslint-disable no-console */
-import {
-  MongoClient, MongoClientOptions, Db, Collection,
-} from 'mongodb';
+import { MongoClient, MongoClientOptions, Db, Collection } from 'mongodb';
 import { IMongoOptions } from './custom-definition';
 
 export class CustomMongoClient {
@@ -87,6 +85,14 @@ export class CustomMongoClient {
       throw new Error(`${this._error_prefix} DB is undefinded`);
     }
     return this._db.collection(col);
+  }
+
+  /** Try to connect to db before get collection, if client already disconnected */
+  public async getCollectionAsync(col: string): Promise<Collection> {
+    if (!(this._db && this.isConnected())) {
+      await this.tryConnect();
+    }
+    return this.getCollection(col);
   }
 
   private _onError = (err: Error): void => {

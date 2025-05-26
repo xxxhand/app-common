@@ -61,6 +61,7 @@ module.exports = {
     "no-inline-comments": "error",
     "no-const-assign": "error",
     "no-underscore-dangle": "off",
+    "object-curly-newline": "off",
     semi: ["error", "always"],
     "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
     "no-restricted-syntax": [
