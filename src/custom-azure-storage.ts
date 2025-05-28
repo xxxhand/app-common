@@ -71,11 +71,11 @@ export class CustomAzureStorage {
   }
 
   // Upload file to azure storage
-  public async uploadFile(source: Buffer | string, targetFile: string): Promise<void> {
+  public async uploadFile(source: Buffer | string, targetFile: string, container: string = ''): Promise<void> {
     if (!this._blobServiceClient) {
       throw new Error(`${this._error_prefix} The blob service client is not initial`);
     }
-    const containerClient = this._blobServiceClient.getContainerClient(this._containerName);
+    const containerClient = this._blobServiceClient.getContainerClient(container || this._containerName);
     if (!await containerClient.exists()) await containerClient.create();
     const blobClient = containerClient.getBlockBlobClient(targetFile);
     if (typeof source === 'string') {
@@ -88,32 +88,32 @@ export class CustomAzureStorage {
   }
 
   // Download file from azure storage
-  public async downloadFile(fileName: string): Promise<BlobDownloadResponseParsed> {
+  public async downloadFile(fileName: string, container: string = ''): Promise<BlobDownloadResponseParsed> {
     if (!this._blobServiceClient) {
       throw new Error(`${this._error_prefix} The blob service client is not initial`);
     }
-    const containerClient = this._blobServiceClient.getContainerClient(this._containerName);
+    const containerClient = this._blobServiceClient.getContainerClient(container || this._containerName);
     const blobClient = containerClient.getBlockBlobClient(fileName);
     if (!await blobClient.exists()) throw new Error(`${this._error_prefix} The file is not exist`);
     return blobClient.download();
   }
 
   // Delete the file from azure storage
-  public async deleteFile(fileName: string): Promise<void> {
+  public async deleteFile(fileName: string, container: string = ''): Promise<void> {
     if (!this._blobServiceClient) {
       throw new Error(`${this._error_prefix} The blob service client is not initial`);
     }
-    const containerClient = this._blobServiceClient.getContainerClient(this._containerName);
+    const containerClient = this._blobServiceClient.getContainerClient(container || this._containerName);
     const blobClient = containerClient.getBlockBlobClient(fileName);
     await blobClient.delete();
   }
 
   // Copy the file from azure storage
-  public async copyFile(sourceFileName: string, targetFileName: string): Promise<void> {
+  public async copyFile(sourceFileName: string, targetFileName: string, container: string = ''): Promise<void> {
     if (!this._blobServiceClient) {
       throw new Error(`${this._error_prefix} The blob service client is not initial`);
     }
-    const containerClient = this._blobServiceClient.getContainerClient(this._containerName);
+    const containerClient = this._blobServiceClient.getContainerClient(container || this._containerName);
     const sourceBlobClient = containerClient.getBlockBlobClient(sourceFileName);
     const targetBlobClient = containerClient.getBlockBlobClient(targetFileName);
     const copyPoller = await targetBlobClient.beginCopyFromURL(sourceBlobClient.url);
@@ -121,11 +121,11 @@ export class CustomAzureStorage {
   }
 
   // Create blob SAS token
-  public async createBlobSasToken(fileName: string, duration: number, permissions: string = 'r'): Promise<string> {
+  public async createBlobSasToken(fileName: string, duration: number, permissions: string = 'r', container: string = ''): Promise<string> {
     if (!this._blobServiceClient) {
       throw new Error(`${this._error_prefix} The blob service client is not initial`);
     }
-    const containerClient = this._blobServiceClient.getContainerClient(this._containerName);
+    const containerClient = this._blobServiceClient.getContainerClient(container || this._containerName);
     const blobClient = containerClient.getBlockBlobClient(fileName);
     const sasToken = await blobClient.generateSasUrl({
       permissions: BlobSASPermissions.parse(permissions),
@@ -138,7 +138,7 @@ export class CustomAzureStorage {
 
   // Create account storage folder SAS token
   public generateAzureStorageSASToken(
-    containerName: string,
+    container: string,
     pathName: string,
     isDirectory: boolean = false,
     duration: number = 60 * 60 * 24,
@@ -147,7 +147,7 @@ export class CustomAzureStorage {
     if (!this._storageSharedKeyCredential) throw new Error(`${this._error_prefix} The storage shared key credential is not initial`);
     return generateDataLakeSASQueryParameters(
       {
-        fileSystemName: containerName,
+        fileSystemName: container,
         startsOn: new Date(),
         expiresOn: new Date(new Date().getTime() + duration * 1000),
         permissions: DataLakeSASPermissions.parse(permissions),
