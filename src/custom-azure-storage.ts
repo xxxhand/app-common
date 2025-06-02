@@ -20,6 +20,14 @@ export class CustomAzureStorage {
   // container name
   private _containerName: string = '';
 
+  // connection map
+  private _connectionMap: Map<string, string> = new Map([
+    ['DefaultEndpointsProtocol', 'https'],
+    ['AccountName', ''],
+    ['AccountKey', ''],
+    ['EndpointSuffix', 'core.windows.net']
+  ]);
+
   // blob service client
   private _blobServiceClient: BlobServiceClient | null = null;
 
@@ -30,16 +38,28 @@ export class CustomAzureStorage {
 
   private readonly _error_prefix = '[custom-azure-storage]';
 
-  private _accountName: string = '';
-
-  private _accountKey: string = '';
-
   private _storageSharedKeyCredential: StorageSharedKeyCredential | null = null;
+
+  get storageSharedKeyCredential(): StorageSharedKeyCredential {
+    if (!this._storageSharedKeyCredential) throw new Error(`${this._error_prefix} The storage shared key credential is not initial`);
+    return this._storageSharedKeyCredential;
+  }
 
   // Set connection string
   public useConnectionString(connectionString: string): CustomAzureStorage {
     this._connectionString = connectionString;
+    this.parseConnectionString(this._connectionString);
     return this;
+  }
+
+  private parseConnectionString(connectionString: string): void {
+    const pairs = connectionString.split(';');
+    for (const pair of pairs) {
+      const idx = pair.indexOf('=');
+      const key = pair.substring(0, idx);
+      const value = pair.substring(idx + 1);
+      if (this._connectionMap.has(key)) this._connectionMap.set(key, value);
+    }
   }
 
   // Will be deprecated in future versions
@@ -49,22 +69,15 @@ export class CustomAzureStorage {
     return this;
   }
 
-  public useAccountName(accountName: string): CustomAzureStorage {
-    this._accountName = accountName;
-    return this;
-  }
-
-  public useAccountKey(accountKey: string): CustomAzureStorage {
-    this._accountKey = accountKey;
-    return this;
-  }
-
   // Initial azure storage instance
   public initial(): CustomAzureStorage {
-    if (CustomValidator.nonEmptyString(this._connectionString)) this._blobServiceClient = BlobServiceClient.fromConnectionString(this._connectionString);
-    if (CustomValidator.nonEmptyString(this._accountName) && CustomValidator.nonEmptyString(this._accountKey)) {
-      this._storageSharedKeyCredential = new StorageSharedKeyCredential(this._accountName, this._accountKey);
+    if (!CustomValidator.nonEmptyString(this._connectionString)) throw new Error(`${this._error_prefix} Connection string is required`);
+    this._blobServiceClient = BlobServiceClient.fromConnectionString(this._connectionString);
+    if (this._connectionMap.get('AccountName') === '' || this._connectionMap.get('AccountKey') === '') {
+      throw new Error(`${this._error_prefix} Parse connection string failed, please check your connection string`);
     }
+    this._storageSharedKeyCredential = new StorageSharedKeyCredential(this._connectionMap.get('AccountName') as string, this._connectionMap.get('AccountKey') as string);
+
     return this;
   }
 
@@ -185,7 +198,15 @@ export class CustomAzureStorage {
         pathName,
         isDirectory,
       },
-      this._storageSharedKeyCredential
+      this.storageSharedKeyCredential
     ).toString();
+  }
+
+  public getDomain(): string {
+    return `${this._connectionMap.get('DefaultEndpointsProtocol')}://${this._connectionMap.get('AccountName')}.${this._connectionMap.get('EndpointSuffix')}`;
+  }
+
+  public getUrl(container: string, path: string): string {
+    return `${this.getDomain()}/${container}/${path}`;
   }
 }
