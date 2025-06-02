@@ -203,7 +203,7 @@ export class CustomAzureStorage {
   }
 
   public getDomain(): string {
-    return `${this._connectionMap.get('DefaultEndpointsProtocol')}://${this._connectionMap.get('AccountName')}.${this._connectionMap.get('EndpointSuffix')}`;
+    return `${this._connectionMap.get('DefaultEndpointsProtocol')}://${this._connectionMap.get('AccountName')}.blob.${this._connectionMap.get('EndpointSuffix')}`;
   }
 
   public getUrl(container: string, path: string): string {
