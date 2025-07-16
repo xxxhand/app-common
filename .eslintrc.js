@@ -34,16 +34,7 @@ module.exports = {
     "no-var": "error",
     "no-tabs": "off",
     "import/prefer-default-export": "off",
-    "comma-dangle": [
-      "error",
-      {
-        arrays: "never",
-        objects: "always-multiline",
-        imports: "always-multiline",
-        exports: "always-multiline",
-        functions: "never",
-      },
-    ],
+    "comma-dangle": 'off',
     "no-await-in-loop": "off",
     "no-console": "off",
     "max-len": [
@@ -58,7 +49,7 @@ module.exports = {
     "no-bitwise": "off",
     "no-empty": "error",
     "no-eval": "error",
-    "no-inline-comments": "error",
+    "no-inline-comments": "off",
     "no-const-assign": "error",
     "no-underscore-dangle": "off",
     "object-curly-newline": "off",

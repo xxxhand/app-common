@@ -137,3 +137,6 @@ test-result
 
 # local test file
 mytry.ts
+
+# example files
+src/examples

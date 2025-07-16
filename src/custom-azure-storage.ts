@@ -1,16 +1,6 @@
-import {
-  BlobDownloadResponseParsed,
-  BlobServiceClient,
-  ContainerClient,
-  SASProtocol,
-  BlobSASPermissions,
-} from '@azure/storage-blob';
+import { BlobDownloadResponseParsed, BlobServiceClient, ContainerClient, SASProtocol, BlobSASPermissions } from '@azure/storage-blob';
 import { Buffer } from 'buffer';
-import {
-  StorageSharedKeyCredential,
-  DataLakeSASPermissions,
-  generateDataLakeSASQueryParameters,
-} from '@azure/storage-file-datalake';
+import { StorageSharedKeyCredential, DataLakeSASPermissions, generateDataLakeSASQueryParameters } from '@azure/storage-file-datalake';
 import { CustomValidator } from './custom-validator';
 
 export class CustomAzureStorage {
@@ -25,7 +15,7 @@ export class CustomAzureStorage {
     ['DefaultEndpointsProtocol', 'https'],
     ['AccountName', ''],
     ['AccountKey', ''],
-    ['EndpointSuffix', 'core.windows.net']
+    ['EndpointSuffix', 'core.windows.net'],
   ]);
 
   // blob service client
@@ -90,7 +80,7 @@ export class CustomAzureStorage {
   // Upload file to azure storage
   public async uploadFile(source: Buffer | string, targetFile: string): Promise<void> {
     const containerClient = this.blobServiceClient.getContainerClient(this._containerName);
-    if (!await containerClient.exists()) await containerClient.create();
+    if (!(await containerClient.exists())) await containerClient.create();
     const blobClient = containerClient.getBlockBlobClient(targetFile);
     if (typeof source === 'string') {
       // Upload file from local file path
@@ -104,7 +94,7 @@ export class CustomAzureStorage {
   // Upload file to azure storage
   public async upload(source: Buffer | string, container: string, path: string): Promise<void> {
     const containerClient = this.blobServiceClient.getContainerClient(container);
-    if (!await containerClient.exists()) await containerClient.create();
+    if (!(await containerClient.exists())) await containerClient.create();
     const blobClient = containerClient.getBlockBlobClient(path);
     if (typeof source === 'string') {
       await blobClient.uploadFile(source);
@@ -118,16 +108,14 @@ export class CustomAzureStorage {
   public async downloadFile(fileName: string): Promise<BlobDownloadResponseParsed> {
     const containerClient = this.blobServiceClient.getContainerClient(this._containerName);
     const blobClient = containerClient.getBlockBlobClient(fileName);
-    if (!await blobClient.exists()) throw new Error(`${this._error_prefix} The file is not exist`);
+    if (!(await blobClient.exists())) throw new Error(`${this._error_prefix} The file is not exist`);
     return blobClient.download();
   }
 
   // Download file from azure storage
   public async download(container: string, fileName: string): Promise<BlobDownloadResponseParsed> {
-    const blobClient = this.blobServiceClient
-      .getContainerClient(container)
-      .getBlockBlobClient(fileName);
-    if (!await blobClient.exists()) throw new Error(`${this._error_prefix} The file is not exist`);
+    const blobClient = this.blobServiceClient.getContainerClient(container).getBlockBlobClient(fileName);
+    if (!(await blobClient.exists())) throw new Error(`${this._error_prefix} The file is not exist`);
     return blobClient.download();
   }
 
@@ -141,10 +129,7 @@ export class CustomAzureStorage {
 
   // Delete the file from azure storage
   public async delete(container: string, fileName: string): Promise<void> {
-    await this.blobServiceClient
-      .getContainerClient(container)
-      .getBlockBlobClient(fileName)
-      .delete();
+    await this.blobServiceClient.getContainerClient(container).getBlockBlobClient(fileName).delete();
   }
 
   // Will be deprecated in future versions
@@ -181,13 +166,7 @@ export class CustomAzureStorage {
   }
 
   // Create account storage file/folder SAS token
-  public createSasToken(
-    container: string,
-    pathName: string,
-    isDirectory: boolean = false,
-    duration: number = 60 * 60 * 24,
-    permissions: string = 'r'
-  ): string {
+  public createSasToken(container: string, pathName: string, isDirectory: boolean = false, duration: number = 60 * 60 * 24, permissions: string = 'r'): string {
     if (!this._storageSharedKeyCredential) throw new Error(`${this._error_prefix} The storage shared key credential is not initial`);
     return generateDataLakeSASQueryParameters(
       {
@@ -198,7 +177,7 @@ export class CustomAzureStorage {
         pathName,
         isDirectory,
       },
-      this.storageSharedKeyCredential
+      this.storageSharedKeyCredential,
     ).toString();
   }
 
