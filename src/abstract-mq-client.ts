@@ -12,7 +12,7 @@ export type TExchangeType = 'direct' | 'topic' | 'headers' | 'fanout' | 'match';
 
 export type TMessageHandler<T = any> = (msg: IConsumeMessage | null, content: T) => Promise<void>;
 
-export abstract class AbstractMQClient {
+export abstract class TMQClient {
   /** Prefix for console log */
   protected errPrefix: string = '';
 
