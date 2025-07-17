@@ -7,6 +7,7 @@ export interface IExchangeOptions extends Options.AssertExchange {}
 export interface IConsumeMessage extends ConsumeMessage {}
 export interface IConsumeOptions extends Options.Consume {}
 export interface IPublishOptions extends Options.Publish {}
+export interface IConnectOptions extends Options.Connect {}
 
 export type TExchangeType = 'direct' | 'topic' | 'headers' | 'fanout' | 'match';
 
