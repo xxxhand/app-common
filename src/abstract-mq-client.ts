@@ -2,16 +2,16 @@
 import { Channel, connect, ConsumeMessage, Options, ChannelModel } from 'amqplib';
 import { TNullable } from './custom-definition';
 
-export interface IQueueOptions extends Options.AssertQueue {}
-export interface IExchangeOptions extends Options.AssertExchange {}
-export interface IConsumeMessage extends ConsumeMessage {}
-export interface IConsumeOptions extends Options.Consume {}
-export interface IPublishOptions extends Options.Publish {}
-export interface IConnectOptions extends Options.Connect {}
+export interface IMqQueueOptions extends Options.AssertQueue {}
+export interface IMqExchangeOptions extends Options.AssertExchange {}
+export interface IMqConsumeMessage extends ConsumeMessage {}
+export interface IMqConsumeOptions extends Options.Consume {}
+export interface IMqPublishOptions extends Options.Publish {}
+export interface IMqConnectOptions extends Options.Connect {}
 
-export type TExchangeType = 'direct' | 'topic' | 'headers' | 'fanout' | 'match';
+export type TMqExchangeType = 'direct' | 'topic' | 'headers' | 'fanout' | 'match';
 
-export type TMessageHandler<T = any> = (msg: IConsumeMessage | null, content: T) => Promise<void>;
+export type TMqMessageHandler<T = any> = (msg: IMqConsumeMessage | null, content: T) => Promise<void>;
 
 export abstract class TMQClient {
   /** Prefix for console log */
@@ -49,20 +49,20 @@ export abstract class TMQClient {
   protected retryTimeout: TNullable<NodeJS.Timeout> = null;
 
   /** Default queue options */
-  protected defaultQueueOptions: IQueueOptions = {
+  protected defaultQueueOptions: IMqQueueOptions = {
     durable: true,
     exclusive: false,
     autoDelete: false,
   };
 
   /** Default consume options */
-  protected defaultConsumeOptions: IConsumeOptions = {
+  protected defaultConsumeOptions: IMqConsumeOptions = {
     noAck: false,
     exclusive: false,
   };
 
   /** Default publish options */
-  protected defaultPublishOptions: IPublishOptions = {
+  protected defaultPublishOptions: IMqPublishOptions = {
     persistent: true,
   };
 
@@ -183,7 +183,7 @@ export abstract class TMQClient {
   }
 
   /** Assert queue exists */
-  public async assertQueue(queueName: string, options?: IQueueOptions): Promise<void> {
+  public async assertQueue(queueName: string, options?: IMqQueueOptions): Promise<void> {
     if (!this.channel) {
       throw new Error(`[${this.errPrefix}] Channel instance not init`);
     }
@@ -193,7 +193,7 @@ export abstract class TMQClient {
   }
 
   /** Publish message to queue (Producer mode) */
-  public async publishToQueue(queueName: string, message: any, options?: IPublishOptions): Promise<boolean> {
+  public async publishToQueue(queueName: string, message: any, options?: IMqPublishOptions): Promise<boolean> {
     if (this.mode !== 'producer') {
       throw new Error(`[${this.errPrefix}] Client is not in producer mode`);
     }
@@ -214,7 +214,7 @@ export abstract class TMQClient {
   }
 
   /** Publish message to exchange (Producer mode) */
-  public async publishToExchange(exchangeName: string, routingKey: string, message: any, options?: IPublishOptions): Promise<boolean> {
+  public async publishToExchange(exchangeName: string, routingKey: string, message: any, options?: IMqPublishOptions): Promise<boolean> {
     if (this.mode !== 'producer') {
       throw new Error(`[${this.errPrefix}] Client is not in producer mode`);
     }
@@ -235,7 +235,7 @@ export abstract class TMQClient {
   }
 
   /** Consume messages from queue (Consumer mode) */
-  public async consumeFromQueue(queueName: string, handler: TMessageHandler, options?: IConsumeOptions): Promise<void> {
+  public async consumeFromQueue(queueName: string, handler: TMqMessageHandler, options?: IMqConsumeOptions): Promise<void> {
     if (this.mode !== 'consumer') {
       throw new Error(`[${this.errPrefix}] Client is not in consumer mode`);
     }
@@ -273,7 +273,7 @@ export abstract class TMQClient {
   }
 
   /** Acknowledge message (Consumer mode) */
-  public ackMessage(msg: IConsumeMessage): void {
+  public ackMessage(msg: IMqConsumeMessage): void {
     if (this.mode !== 'consumer') {
       throw new Error(`[${this.errPrefix}] Client is not in consumer mode`);
     }
@@ -286,7 +286,7 @@ export abstract class TMQClient {
   }
 
   /** Reject message (Consumer mode) */
-  public rejectMessage(msg: IConsumeMessage, requeue: boolean = false): void {
+  public rejectMessage(msg: IMqConsumeMessage, requeue: boolean = false): void {
     if (this.mode !== 'consumer') {
       throw new Error(`[${this.errPrefix}] Client is not in consumer mode`);
     }
@@ -314,7 +314,7 @@ export abstract class TMQClient {
   }
 
   /** Assert exchange exists */
-  public async assertExchange(exchangeName: string, exchangeType: TExchangeType, options?: IExchangeOptions): Promise<void> {
+  public async assertExchange(exchangeName: string, exchangeType: TMqExchangeType, options?: IMqExchangeOptions): Promise<void> {
     if (!this.channel) {
       throw new Error(`[${this.errPrefix}] Channel instance not init`);
     }
