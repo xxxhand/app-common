@@ -1,5 +1,6 @@
 import { BlobDownloadResponseParsed, BlobServiceClient, ContainerClient, SASProtocol, BlobSASPermissions } from '@azure/storage-blob';
 import { Buffer } from 'buffer';
+import * as mime from 'mime-types';
 import { StorageSharedKeyCredential, DataLakeSASPermissions, generateDataLakeSASQueryParameters } from '@azure/storage-file-datalake';
 import { CustomValidator } from './custom-validator';
 
@@ -72,8 +73,10 @@ export class CustomAzureStorage {
   }
 
   // Get container client
-  public getContainerClient(): ContainerClient {
-    return this.blobServiceClient.getContainerClient(this._containerName);
+  public getContainerClient(containerName = ''): ContainerClient {
+    return CustomValidator.nonEmptyString(containerName)
+      ? this.blobServiceClient.getContainerClient(containerName)
+      : this.blobServiceClient.getContainerClient(this._containerName);
   }
 
   // Will be deprecated in future versions
@@ -97,7 +100,10 @@ export class CustomAzureStorage {
     if (!(await containerClient.exists())) await containerClient.create();
     const blobClient = containerClient.getBlockBlobClient(path);
     if (typeof source === 'string') {
-      await blobClient.uploadFile(source);
+      const contentType = mime.lookup(source) || undefined;
+      await blobClient.uploadFile(source, {
+        blobHTTPHeaders: contentType ? { blobContentType: contentType } : undefined,
+      });
     } else {
       await blobClient.upload(source, source.length);
     }
