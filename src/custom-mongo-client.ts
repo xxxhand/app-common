@@ -96,16 +96,16 @@ export class CustomMongoClient {
   }
 
   private _onError = (err: Error): void => {
-    console.log(`${this._error_prefix} Database ${this._dbName} error: ${err}`);
+    console.log(`${this._error_prefix} Database ${this._dbName} error: ${err.stack}`);
     this._onClose();
-    this.tryConnect();
   };
 
-  private _onClose = (): void => {
+  private _onClose = async (): Promise<void> => {
     console.log(`${this._error_prefix} Database ${this._dbName} close...`);
     this._isConnected = false;
     this._db = undefined;
     this._instance.removeAllListeners();
     this._numberOfRetries = 0;
+    await this.tryConnect();
   };
 }
