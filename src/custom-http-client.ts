@@ -87,6 +87,44 @@ export class CustomHttpClient {
     }
   }
 
+  public async tryPutJson<R = any>(opt: CustomHttpOption): Promise<CustomResult<R> | R> {
+    const conf: AxiosRequestConfig = {
+      url: opt.url,
+      method: 'put',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      timeout: opt.timeout,
+      responseType: 'json',
+      data: {},
+    };
+    if (opt.isNotEmptyHeaders()) {
+      opt.headers.forEach((v, k) => (conf.headers!![k] = v));
+    }
+    if (opt.isNotEmptyParameters()) {
+      opt.parameters.forEach((v, k) => (conf.data!![k] = v));
+    }
+
+    let res: AxiosResponse;
+    try {
+      res = await axios(conf);
+      if (opt.isUseCustomResult()) {
+        return new CustomResult<R>().withResult(res.data);
+      }
+      return res.data;
+    } catch (ex: any) {
+      if (isAxiosError(ex)) {
+        const err = <AxiosError>ex;
+        if (err.response && err.response.data) {
+          console.error(`${this._errPrefix} status: ${err.status}, data: ${JSON.stringify(err.response.data)}`);
+          return new CustomResult().withCode(err.response.status).withMessage(`${this._errPrefix} ${conf.method} ${conf.url} fail: ${err.message}`).withResult(err.response.data);
+        }
+      }
+      console.error(`${this._errPrefix} ${ex.stack}`);
+      return new CustomResult().withCode(this._errCalled).withMessage(`${this._errPrefix} ${conf.method} ${conf.url} fail: ${ex.message}`).withResult(conf);
+    }
+  }
+
   /** Send request with content-type: application/x-www-form-urlencoded */
   public async tryPostUrlEncode<R = any>(opt: CustomHttpOption): Promise<CustomResult<R> | R> {
     const conf: AxiosRequestConfig = {
