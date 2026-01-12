@@ -71,7 +71,7 @@ export abstract class TEasyTranslator {
     }
     const currDict = this.translationDictionary.get(currLocale!.toLowerCase());
     if (currDict) {
-      const str = (currDict) as Record<string, string>)[key];
+      const str = currDict[key];
       if (CustomValidator.nonEmptyString(str)) {
         return str;
       }
