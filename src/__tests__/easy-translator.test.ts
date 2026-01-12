@@ -23,4 +23,8 @@ describe('Easy translator test', () => {
   test('Not found key, should be input key', () => {
     expect(trs.t('HELLOLO')).toBe('HELLOLO');
   });
+  test('Not found fallback language, should be input key', () => {
+    trs.useFallbackLng('nofallback')
+    expect(trs.t('HELLO')).toBe('HELLO');
+  });
 });
